@@ -54,7 +54,15 @@ export const getSingleTask = async(req:Request, res:Response)=>{
 export const updateTask = async(req:Request, res:Response)=>{
     try{
         const { id: taskID } = req.params;
-        const Tasks = await Todo.findOneAndUpdate({_id: taskID}, req.body, {})
+        const Tasks = await Todo.findOneAndUpdate({_id: taskID}, req.body, {new:true, runValidator:true})
+
+        if(!Tasks){
+            res.status(404).json({
+                id: taskID,
+                data: req.body
+            })
+        }
+        res.status(404).json({Tasks})
     }catch(err){
         res.status(500).json({
             Error: "Internal server Error",
@@ -65,7 +73,18 @@ export const updateTask = async(req:Request, res:Response)=>{
 
 export const deleteTask = async(req:Request, res:Response)=>{
     try{
+        const {id: taskID} = req.params
+        const Task = await Todo.findOneAndDelete({_id: taskID})
 
+        if(!Task){
+            return res.status(404).json({
+                message: `No task with id${taskID} found`
+            })
+        }
+        res.status(200).json({
+            message: "Task deleted successfully",
+            data: {Task}
+        })
     }catch(err){
         res.status(500).json({
             Error: "Internal server Error",

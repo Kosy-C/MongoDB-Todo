@@ -1,5 +1,5 @@
 import express from 'express';
-import {createTodo, getAllTasks, getSingleTask} from '../controller/todoController';
+import {createTodo, deleteTask, getAllTasks, getSingleTask, updateTask} from '../controller/todoController';
 
 const router = express.Router();
 
@@ -9,9 +9,9 @@ router.get('/all', getAllTasks);
 
 router.get('/:id', getSingleTask);
 
-router.update('/:id', getSingleTask);
+router.patch('/:id', updateTask);
 
-router.delete('/:id', getSingleTask);
+router.delete('/:id', deleteTask);
 
 
 

@@ -68,7 +68,14 @@ exports.getSingleTask = getSingleTask;
 const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id: taskID } = req.params;
-        const Tasks = yield todoModel_1.default.findOneAndUpdate({ _id: taskID }, req.body, {});
+        const Tasks = yield todoModel_1.default.findOneAndUpdate({ _id: taskID }, req.body, { new: true, runValidator: true });
+        if (!Tasks) {
+            res.status(404).json({
+                id: taskID,
+                data: req.body
+            });
+        }
+        res.status(404).json({ Tasks });
     }
     catch (err) {
         res.status(500).json({
@@ -80,6 +87,17 @@ const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.updateTask = updateTask;
 const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { id: taskID } = req.params;
+        const Task = yield todoModel_1.default.findOneAndDelete({ _id: taskID });
+        if (!Task) {
+            return res.status(404).json({
+                message: `No task with id${taskID} found`
+            });
+        }
+        res.status(200).json({
+            message: "Task deleted successfully",
+            data: { Task }
+        });
     }
     catch (err) {
         res.status(500).json({

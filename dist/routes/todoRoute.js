@@ -9,6 +9,6 @@ const router = express_1.default.Router();
 router.post('/create', todoController_1.createTodo);
 router.get('/all', todoController_1.getAllTasks);
 router.get('/:id', todoController_1.getSingleTask);
-router.update('/:id', todoController_1.getSingleTask);
-router.delete('/:id', todoController_1.getSingleTask);
+router.patch('/:id', todoController_1.updateTask);
+router.delete('/:id', todoController_1.deleteTask);
 exports.default = router;
